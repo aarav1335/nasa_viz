@@ -3,167 +3,109 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MODIS Earth Explorer · DSC 106 Checkpoint</title>
+  <title>MODIS Land Surface Temperature · DSC 106 Checkpoint</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">DSC 106 Project 3 Checkpoint</p>
-      <h1>MODIS Earth Explorer</h1>
-      <p>
-        Six early-stage exploratory visualizations using NASA MODIS imagery from NASA GIBS.
-        These are designed to help choose a final direction: seasonal greenness, fire activity, or surface heat.
-      </p>
+  <header class="site-hero">
+    <div class="hero-label">DSC 106 - Project 3</div>
+    <div class="hero-grid">
+      <div>
+        <h1>MODIS Land Surface Temperature Explorer</h1>
+        <p class="hero-subtitle">
+          Question: How does land surface temperature vary across regions and seasons?
+        </p>
+      </div>
+
+      <aside class="team-card" aria-label="Team information">
+        <p class="team-title">Team Vizionary</p>
+        <p class="team-names">Jonathan Yim:  jgyim@ucsd.edu</p>
+        <p class="team-names">Isabela De La Cruz: imdelacruz@ucsd.edu</p>
+        <p class="team-names">Aarav Agrawal: a7agrawal@ucsd.edu</p>
+      </aside>
     </div>
-    <aside class="hero-card">
-      <strong>Current checkpoint goal</strong>
-      <span>Show 5–6 rough graphs, make the data source clear, and identify which visual direction is most promising.</span>
-    </aside>
   </header>
 
   <main>
-    <section class="controls-panel" aria-label="Interactive controls">
+    <section class="intro-card">
       <div>
-        <p class="kicker">Shared controls</p>
-        <h2>Try the same region across the early graphs</h2>
+        <p class="section-kicker">Project focus</p>
+        <h2>Using NASA MODIS imagery to compare surface heat</h2>
+        <p>
+          This checkpoint version focuses only on the land surface temperature direction because it is the most reliable and visually clear part of the prototype so far.
+          The maps below use NASA GIBS WMS image layers and update based on region and date.
+        </p>
       </div>
-      <div class="control-grid">
+      <div class="data-note">
+        <strong>Data source</strong>
+        <span>NASA GIBS WMS · MODIS Terra Land Surface Temperature Day</span>
+      </div>
+    </section>
+
+    <section class="controls-card" aria-label="Visualization controls">
+      <div class="control-heading">
+        <p class="section-kicker">Controls</p>
+        <h2>Change the region and date</h2>
+      </div>
+
+      <div class="controls-grid">
         <label>
           <span>Region</span>
           <select id="region-select"></select>
         </label>
+
         <label>
-          <span>NDVI month</span>
-          <input id="ndvi-month" type="range" min="0" max="11" value="6" />
-          <strong id="ndvi-month-label">July</strong>
-        </label>
-        <label>
-          <span>Fire date</span>
-          <input id="fire-date" type="date" value="2024-07-26" min="2016-07-30" max="2025-10-01" />
-        </label>
-        <label>
-          <span>Temperature date</span>
-          <input id="temp-date" type="date" value="2024-05-15" min="2016-07-30" max="2025-10-01" />
+          <span>Selected date</span>
+          <input id="temp-date" type="date" value="2024-07-15" min="2016-07-30" max="2025-10-01" />
         </label>
       </div>
     </section>
 
-    <section class="section-intro">
-      <p class="kicker">Greenness / NDVI</p>
-      <h2>Prototype question 1: How does vegetation greenness shift by season?</h2>
-      <p>
-        NDVI highlights plant greenness. These maps are useful for exploring whether the final project should focus on seasonal vegetation change across different climate regions.
-      </p>
-    </section>
-
-    <section class="viz-grid">
-      <article class="viz-card wide">
-        <div class="viz-heading">
+    <section class="viz-section">
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
           <div>
-            <p class="graph-number">Graph 1</p>
-            <h3>Selected-month NDVI map</h3>
+            <p class="graph-tag">Graph 1</p>
+            <h2>Selected-date land surface temperature</h2>
           </div>
-          <span class="status-pill">Interactive draft</span>
+          <span class="pill">Interactive draft</span>
         </div>
-        <svg id="ndvi-main" class="map-svg" role="img" aria-label="Selected MODIS NDVI map"></svg>
-        <p class="caption" id="ndvi-caption"></p>
-      </article>
 
-      <article class="viz-card">
-        <div class="viz-heading">
-          <div>
-            <p class="graph-number">Graph 2</p>
-            <h3>Seasonal NDVI snapshots</h3>
-          </div>
-          <span class="status-pill">Rough comparison</span>
-        </div>
-        <div id="ndvi-seasons" class="mini-grid"></div>
-        <p class="caption">This is a stronger checkpoint graph than a fake line chart because each panel is a real NASA image request with a different TIME value.</p>
-      </article>
-    </section>
-
-    <section class="section-intro">
-      <p class="kicker">Active fires</p>
-      <h2>Prototype question 2: Where do MODIS fire detections cluster?</h2>
-      <p>
-        The fire layer is an overlay, so it works best when shown on top of a true-color base map. The before/during/after view makes the idea more convincing than one isolated fire image.
-      </p>
-    </section>
-
-    <section class="viz-grid">
-      <article class="viz-card wide">
-        <div class="viz-heading">
-          <div>
-            <p class="graph-number">Graph 3</p>
-            <h3>Fire detections on true-color imagery</h3>
-          </div>
-          <span class="status-pill">Layer overlay</span>
-        </div>
-        <svg id="fire-main" class="map-svg" role="img" aria-label="MODIS fire detections map"></svg>
-        <p class="caption" id="fire-caption"></p>
-      </article>
-
-      <article class="viz-card">
-        <div class="viz-heading">
-          <div>
-            <p class="graph-number">Graph 4</p>
-            <h3>Before / selected / after fire comparison</h3>
-          </div>
-          <span class="status-pill">Temporal draft</span>
-        </div>
-        <div id="fire-sequence" class="mini-grid stacked"></div>
-        <p class="caption">For the final project, this could become a recovery or disturbance story if paired with NDVI before/after images.</p>
-      </article>
-    </section>
-
-    <section class="section-intro">
-      <p class="kicker">Land surface temperature</p>
-      <h2>Prototype question 3: How does surface heat vary across regions and seasons?</h2>
-      <p>
-        Land surface temperature is not air temperature; it measures the heat of the land surface. It is helpful for comparing deserts, cities, forests, and monsoon regions.
-      </p>
-    </section>
-
-    <section class="viz-grid">
-      <article class="viz-card wide">
-        <div class="viz-heading">
-          <div>
-            <p class="graph-number">Graph 5</p>
-            <h3>Selected-date land surface temperature</h3>
-          </div>
-          <span class="status-pill">Interactive draft</span>
-        </div>
-        <svg id="temp-main" class="map-svg" role="img" aria-label="MODIS land surface temperature map"></svg>
+        <svg id="temp-main" class="map-svg" role="img" aria-label="Selected MODIS land surface temperature map"></svg>
         <p class="caption" id="temp-caption"></p>
       </article>
 
-      <article class="viz-card">
-        <div class="viz-heading">
+      <article class="viz-card secondary-viz">
+        <div class="viz-header">
           <div>
-            <p class="graph-number">Graph 6</p>
-            <h3>Seasonal surface temperature snapshots</h3>
+            <p class="graph-tag">Graph 2</p>
+            <h2>Seasonal temperature snapshots</h2>
           </div>
-          <span class="status-pill">Rough comparison</span>
+          <span class="pill">Comparison draft</span>
         </div>
-        <div id="temp-seasons" class="mini-grid"></div>
-        <p class="caption">This is a good backup direction, but it may be less focused than the NDVI story unless the final question becomes climate/heat-oriented.</p>
+
+        <div id="temp-seasons" class="snapshot-grid"></div>
+        <p class="caption">
+          These four panels use the same region but different dates, making it easier to compare seasonal changes in surface heat.
+        </p>
       </article>
     </section>
 
-    <section class="notes-panel">
+    <section class="reflection-card">
       <div>
-        <p class="kicker">Checkpoint interpretation</p>
-        <h2>Most promising final direction</h2>
-        <p>
-          The strongest final path is probably the NDVI/greenness story because it has a clear seasonal question, easy interaction, and visible regional differences.
-          Fires and temperature are useful supporting layers, but they currently feel more like side explorations.
-        </p>
+        <p class="section-kicker">Checkpoint interpretation</p>
+        <h2>Why this direction is stronger</h2>
       </div>
-      <div class="notes-list">
-        <p><strong>Data:</strong> NASA GIBS WMS layers loaded directly in the browser.</p>
-        <p><strong>Interaction:</strong> region dropdown, month slider, date filters, hover tooltips, and small-multiple comparisons.</p>
-        <p><strong>Next step:</strong> decide whether the final project focuses on NDVI seasonality or fire/vegetation recovery.</p>
+      <div class="reflection-grid">
+        <p>
+          <strong>Clearer visual story:</strong> the temperature layer produces more readable differences across regions and seasons than the earlier NDVI and fire layers.
+        </p>
+        <p>
+          <strong>Good interaction:</strong> the region dropdown changes the spatial frame, while the date picker changes the temporal frame.
+        </p>
+        <p>
+          <strong>Next step:</strong> for the final project, this could become a more polished comparison of hot, dry, tropical, and urban regions.
+        </p>
       </div>
     </section>
   </main>
