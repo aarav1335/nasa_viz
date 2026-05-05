@@ -6,57 +6,45 @@
   <title>MODIS Earth Explorer</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
   <header class="topbar">
     <div>
-      <p class="eyebrow">DSC 106 Project 3</p>
+      <p class="eyebrow">DSC 106 Project 3 Checkpoint</p>
       <h1>MODIS Earth Explorer</h1>
     </div>
     <p class="note">
-      Explore real NASA MODIS satellite imagery through NDVI, wildfire detections,
-      and land surface temperature layers from NASA GIBS.
+      Six early exploratory views using NASA MODIS imagery from NASA Global Imagery Browse Services (GIBS).
     </p>
   </header>
 
-  <nav class="tabs">
-    <button class="tab is-active" data-view="greenness">1. Greenness</button>
-    <button class="tab" data-view="fires">2. Fires</button>
-    <button class="tab" data-view="temperature">3. Temperature</button>
+  <nav class="tabs" aria-label="Visualization sections">
+    <button class="tab is-active" data-view="greenness">Greenness / NDVI</button>
+    <button class="tab" data-view="fires">Active Fires</button>
+    <button class="tab" data-view="temperature">Surface Temperature</button>
   </nav>
 
   <main>
     <section id="greenness" class="view is-active">
       <div class="view-copy">
-        <p class="kicker">MODIS Terra NDVI 8-Day</p>
-        <h2>How does vegetation change across seasons?</h2>
+        <p class="kicker">Graphs 1–2 · MODIS Terra NDVI 8-Day</p>
+        <h2>How does seasonal vegetation change across regions?</h2>
         <p>
-          NDVI highlights vegetation density. Move through the year to see seasonal
-          greenness patterns across the globe or zoom into a specific region.
+          NDVI is a satellite-derived vegetation index. This early prototype compares MODIS greenness imagery by month and region.
         </p>
       </div>
 
       <div class="toolbar">
-        <label>
-          <strong>Month</strong>
-          <input id="ndvi-month" type="range" min="0" max="11" value="6" />
-          <span id="ndvi-month-label">July</span>
-        </label>
-
-        <label>
-          <strong>Region</strong>
-          <select id="ndvi-region"></select>
-        </label>
+        <label><strong>Month</strong><input id="ndvi-month" type="range" min="0" max="11" value="6" /><span id="ndvi-month-label">July</span></label>
+        <label><strong>Region</strong><select id="ndvi-region"></select></label>
       </div>
 
       <div class="grid-two">
         <figure class="panel">
-          <figcaption>MODIS NDVI satellite layer</figcaption>
-          <svg id="ndvi-map"></svg>
+          <figcaption>Graph 1: Selected-month MODIS NDVI map</figcaption>
+          <svg id="ndvi-map" role="img" aria-label="MODIS NDVI map"></svg>
         </figure>
-
         <figure class="panel">
-          <figcaption>Seasonal comparison using real MODIS image snapshots</figcaption>
+          <figcaption>Graph 2: Seasonal NDVI snapshots</figcaption>
           <div id="ndvi-small-multiples" class="small-multiples"></div>
         </figure>
       </div>
@@ -64,75 +52,52 @@
 
     <section id="fires" class="view">
       <div class="view-copy">
-        <p class="kicker">MODIS Active Fire Layer</p>
-        <h2>Where are active fire detections visible?</h2>
+        <p class="kicker">Graphs 3–4 · MODIS Active Fire Detections</p>
+        <h2>Where do active fire detections appear over time?</h2>
         <p>
-          This view overlays MODIS active fire detections on true-color satellite
-          imagery. Change the date and region to compare fire activity spatially.
+          This view overlays MODIS fire detections on true-color MODIS imagery. It is best viewed over fire-prone regions such as California or Australia.
         </p>
       </div>
 
       <div class="toolbar">
-        <label>
-          <strong>Date</strong>
-          <input id="fire-date" type="date" value="2024-08-01" min="2016-07-30" max="2025-12-31" />
-        </label>
-
-        <label>
-          <strong>Region</strong>
-          <select id="fire-region"></select>
-        </label>
-
-        <label class="toggle">
-          <input id="fire-base-toggle" type="checkbox" checked />
-          Show true-color base
-        </label>
+        <label><strong>Date</strong><input id="fire-date" type="date" value="2024-08-01" /></label>
+        <label><strong>Region</strong><select id="fire-region"></select></label>
+        <label class="toggle"><input id="fire-base-toggle" type="checkbox" checked /> Show true-color base layer</label>
       </div>
 
       <div class="grid-two">
         <figure class="panel">
-          <figcaption>MODIS fire detections over satellite imagery</figcaption>
-          <svg id="fire-map"></svg>
+          <figcaption>Graph 3: MODIS fire detections on selected date</figcaption>
+          <svg id="fire-map" role="img" aria-label="MODIS fire map"></svg>
         </figure>
-
         <figure class="panel">
-          <figcaption>Before / during / after comparison</figcaption>
-          <div id="fire-comparison" class="small-multiples"></div>
+          <figcaption>Graph 4: Before / selected / after fire comparison</figcaption>
+          <div id="fire-comparison" class="small-multiples three"></div>
         </figure>
       </div>
     </section>
 
     <section id="temperature" class="view">
       <div class="view-copy">
-        <p class="kicker">MODIS Terra Land Surface Temperature</p>
-        <h2>How does surface heat vary by place and date?</h2>
+        <p class="kicker">Graphs 5–6 · MODIS Terra Land Surface Temperature</p>
+        <h2>How does land surface heat vary across regions and seasons?</h2>
         <p>
-          Land surface temperature shows how hot the Earth’s surface is, which can
-          differ from air temperature. This is useful for comparing deserts, cities,
-          forests, and polar regions.
+          Land surface temperature measures the temperature of the Earth’s surface, not the air. This helps compare deserts, cities, forests, and high-latitude regions.
         </p>
       </div>
 
       <div class="toolbar">
-        <label>
-          <strong>Date</strong>
-          <input id="temp-date" type="date" value="2024-07-15" min="2016-07-30" max="2025-12-31" />
-        </label>
-
-        <label>
-          <strong>Region</strong>
-          <select id="temp-region"></select>
-        </label>
+        <label><strong>Date</strong><input id="temp-date" type="date" value="2024-07-15" /></label>
+        <label><strong>Region</strong><select id="temp-region"></select></label>
       </div>
 
       <div class="grid-two">
         <figure class="panel">
-          <figcaption>MODIS land surface temperature layer</figcaption>
-          <svg id="temp-map"></svg>
+          <figcaption>Graph 5: Selected-date land surface temperature</figcaption>
+          <svg id="temp-map" role="img" aria-label="MODIS land surface temperature map"></svg>
         </figure>
-
         <figure class="panel">
-          <figcaption>Same region across seasons</figcaption>
+          <figcaption>Graph 6: Seasonal land surface temperature snapshots</figcaption>
           <div id="temp-small-multiples" class="small-multiples"></div>
         </figure>
       </div>
@@ -140,20 +105,11 @@
   </main>
 
   <section class="choice-notes">
-    <h2>Data note</h2>
+    <h2>Checkpoint data/design notes</h2>
     <div>
-      <p>
-        The maps are loaded directly from NASA Global Imagery Browse Services
-        using MODIS WMS layers.
-      </p>
-      <p>
-        The time slider changes the WMS <code>TIME</code> parameter, so the image
-        updates to the selected date.
-      </p>
-      <p>
-        The region selector changes the WMS <code>BBOX</code> parameter, creating
-        a spatial filter without server-side code.
-      </p>
+      <p><strong>Dataset:</strong> NASA MODIS imagery served through NASA GIBS WMS.</p>
+      <p><strong>Interaction:</strong> month/date filters, region filters, layer toggles, and details-on-hover.</p>
+      <p><strong>Next step:</strong> narrow the final project to one strong question, likely seasonal vegetation change or fire/vegetation recovery.</p>
     </div>
   </section>
 
