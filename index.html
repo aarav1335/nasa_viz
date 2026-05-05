@@ -1,147 +1,163 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MODIS Visualization Concepts</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="d3.v7.min.js"></script>
-  </head>
-  <body>
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">DSC 106 Project 3</p>
-        <h1>MODIS visualization concept gallery</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MODIS Earth Explorer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">DSC 106 Project 3</p>
+      <h1>MODIS Earth Explorer</h1>
+    </div>
+    <p class="note">
+      Explore real NASA MODIS satellite imagery through NDVI, wildfire detections,
+      and land surface temperature layers from NASA GIBS.
+    </p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab is-active" data-view="greenness">1. Greenness</button>
+    <button class="tab" data-view="fires">2. Fires</button>
+    <button class="tab" data-view="temperature">3. Temperature</button>
+  </nav>
+
+  <main>
+    <section id="greenness" class="view is-active">
+      <div class="view-copy">
+        <p class="kicker">MODIS Terra NDVI 8-Day</p>
+        <h2>How does vegetation change across seasons?</h2>
+        <p>
+          NDVI highlights vegetation density. Move through the year to see seasonal
+          greenness patterns across the globe or zoom into a specific region.
+        </p>
       </div>
-      <p class="note">Prototype data shaped like MODIS products, ready to replace with real NASA layers.</p>
-    </header>
 
-    <nav class="tabs" aria-label="Visualization concepts">
-      <button class="tab is-active" data-view="greenness">1. Greenness</button>
-      <button class="tab" data-view="fire">3. Fire scars</button>
-      <button class="tab" data-view="change">8. Earth change</button>
-    </nav>
+      <div class="toolbar">
+        <label>
+          <strong>Month</strong>
+          <input id="ndvi-month" type="range" min="0" max="11" value="6" />
+          <span id="ndvi-month-label">July</span>
+        </label>
 
-    <main>
-      <section class="view is-active" id="greenness" aria-labelledby="greenness-title">
-        <div class="view-copy">
-          <p class="kicker">Option 1</p>
-          <h2 id="greenness-title">How green is the planet over the year?</h2>
-          <p>
-            A seasonal NDVI view. The map shows simulated monthly vegetation intensity by biome,
-            while the line chart compares how different places green up and fade through the year.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Month
-            <input id="month-slider" type="range" min="0" max="11" value="6" />
-            <strong id="month-label">July</strong>
-          </label>
-          <label>
-            Focus biome
-            <select id="biome-select">
-              <option value="all">All biomes</option>
-              <option value="boreal">Boreal forest</option>
-              <option value="temperate">Temperate forest</option>
-              <option value="grassland">Grassland</option>
-              <option value="desert">Desert</option>
-              <option value="tropical">Tropical forest</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>Monthly NDVI intensity</figcaption>
-            <svg id="ndvi-map" role="img" aria-label="Map-like grid colored by NDVI"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Seasonal curve by selected biome</figcaption>
-            <svg id="ndvi-chart" role="img" aria-label="Line chart of NDVI by month"></svg>
-          </figure>
-        </div>
-      </section>
-
-      <section class="view" id="fire" aria-labelledby="fire-title">
-        <div class="view-copy">
-          <p class="kicker">Option 3</p>
-          <h2 id="fire-title">Wildfire scars before and after</h2>
-          <p>
-            A before, burn, and recovery sequence. This lets viewers scrub through a fire event,
-            compare burn severity, and see vegetation rebound after the peak damage.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Event stage
-            <input id="fire-slider" type="range" min="0" max="4" value="2" />
-            <strong id="fire-label">Peak burn</strong>
-          </label>
-          <label class="toggle">
-            <input id="severity-toggle" type="checkbox" checked />
-            Show severity overlay
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>Landscape condition</figcaption>
-            <svg id="fire-map" role="img" aria-label="Fire scar map"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Vegetation loss and recovery</figcaption>
-            <svg id="fire-chart" role="img" aria-label="Line chart of burn severity and vegetation"></svg>
-          </figure>
-        </div>
-      </section>
-
-      <section class="view" id="change" aria-labelledby="change-title">
-        <div class="view-copy">
-          <p class="kicker">Option 8</p>
-          <h2 id="change-title">Two decades of Earth from MODIS</h2>
-          <p>
-            A story selector for long-term landscape change. Pick a place, move through time,
-            and compare the current snapshot against the full trend.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Location
-            <select id="location-select"></select>
-          </label>
-          <label>
-            Year
-            <input id="year-slider" type="range" min="2002" max="2024" value="2015" />
-            <strong id="year-label">2015</strong>
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>MODIS-style yearly snapshot</figcaption>
-            <svg id="change-map" role="img" aria-label="Yearly landscape snapshot"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Long-term indicator trend</figcaption>
-            <svg id="change-chart" role="img" aria-label="Trend chart for selected location"></svg>
-          </figure>
-        </div>
-      </section>
-    </main>
-
-    <aside class="choice-notes">
-      <h2>How to choose</h2>
-      <div>
-        <p><strong>Greenness</strong> is best if you want a clean, global, seasonal story.</p>
-        <p><strong>Fire scars</strong> is best if you want a dramatic before/after narrative.</p>
-        <p><strong>Earth change</strong> is best if you want a broader “MODIS over time” project with multiple case studies.</p>
+        <label>
+          <strong>Region</strong>
+          <select id="ndvi-region"></select>
+        </label>
       </div>
-    </aside>
 
-    <script src="main.js"></script>
-  </body>
+      <div class="grid-two">
+        <figure class="panel">
+          <figcaption>MODIS NDVI satellite layer</figcaption>
+          <svg id="ndvi-map"></svg>
+        </figure>
+
+        <figure class="panel">
+          <figcaption>Seasonal comparison using real MODIS image snapshots</figcaption>
+          <div id="ndvi-small-multiples" class="small-multiples"></div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="fires" class="view">
+      <div class="view-copy">
+        <p class="kicker">MODIS Active Fire Layer</p>
+        <h2>Where are active fire detections visible?</h2>
+        <p>
+          This view overlays MODIS active fire detections on true-color satellite
+          imagery. Change the date and region to compare fire activity spatially.
+        </p>
+      </div>
+
+      <div class="toolbar">
+        <label>
+          <strong>Date</strong>
+          <input id="fire-date" type="date" value="2024-08-01" min="2016-07-30" max="2025-12-31" />
+        </label>
+
+        <label>
+          <strong>Region</strong>
+          <select id="fire-region"></select>
+        </label>
+
+        <label class="toggle">
+          <input id="fire-base-toggle" type="checkbox" checked />
+          Show true-color base
+        </label>
+      </div>
+
+      <div class="grid-two">
+        <figure class="panel">
+          <figcaption>MODIS fire detections over satellite imagery</figcaption>
+          <svg id="fire-map"></svg>
+        </figure>
+
+        <figure class="panel">
+          <figcaption>Before / during / after comparison</figcaption>
+          <div id="fire-comparison" class="small-multiples"></div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="temperature" class="view">
+      <div class="view-copy">
+        <p class="kicker">MODIS Terra Land Surface Temperature</p>
+        <h2>How does surface heat vary by place and date?</h2>
+        <p>
+          Land surface temperature shows how hot the Earth’s surface is, which can
+          differ from air temperature. This is useful for comparing deserts, cities,
+          forests, and polar regions.
+        </p>
+      </div>
+
+      <div class="toolbar">
+        <label>
+          <strong>Date</strong>
+          <input id="temp-date" type="date" value="2024-07-15" min="2016-07-30" max="2025-12-31" />
+        </label>
+
+        <label>
+          <strong>Region</strong>
+          <select id="temp-region"></select>
+        </label>
+      </div>
+
+      <div class="grid-two">
+        <figure class="panel">
+          <figcaption>MODIS land surface temperature layer</figcaption>
+          <svg id="temp-map"></svg>
+        </figure>
+
+        <figure class="panel">
+          <figcaption>Same region across seasons</figcaption>
+          <div id="temp-small-multiples" class="small-multiples"></div>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <section class="choice-notes">
+    <h2>Data note</h2>
+    <div>
+      <p>
+        The maps are loaded directly from NASA Global Imagery Browse Services
+        using MODIS WMS layers.
+      </p>
+      <p>
+        The time slider changes the WMS <code>TIME</code> parameter, so the image
+        updates to the selected date.
+      </p>
+      <p>
+        The region selector changes the WMS <code>BBOX</code> parameter, creating
+        a spatial filter without server-side code.
+      </p>
+    </div>
+  </section>
+
+  <script src="d3.v7.min.js"></script>
+  <script src="main.js"></script>
+</body>
 </html>
