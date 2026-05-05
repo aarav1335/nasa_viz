@@ -1,16 +1,16 @@
 :root {
-  --bg: #0e1512;
-  --bg-soft: #15201b;
-  --paper: #fffaf0;
-  --paper-soft: #f6f0e2;
-  --ink: #16211c;
-  --muted: #64736c;
-  --line: #ddd3c0;
-  --accent: #dd7f38;
-  --accent-dark: #9b4e1c;
-  --green: #2d6a4f;
-  --green-soft: #e8f0ea;
-  --shadow: 0 22px 60px rgba(4, 13, 9, 0.18);
+  --bg: #0a0f1a;
+  --bg-soft: #101828;
+  --paper: #f0f4ff;
+  --paper-soft: #e6ecf8;
+  --ink: #111827;
+  --muted: #5a6a82;
+  --line: #c8d4e8;
+  --accent: #3b82f6;
+  --accent-dark: #1d4ed8;
+  --green: #1e4d7b;
+  --green-soft: #ddeaf8;
+  --shadow: 0 22px 60px rgba(4, 9, 20, 0.22);
 }
 
 * {
@@ -21,14 +21,14 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(circle at top left, rgba(221, 127, 56, 0.28), transparent 34rem),
-    linear-gradient(180deg, var(--bg) 0%, #18231e 28rem, #f3ead8 28rem, #f3ead8 100%);
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.25), transparent 34rem),
+    linear-gradient(180deg, var(--bg) 0%, #0d1f3c 28rem, #e8eef8 28rem, #e8eef8 100%);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .site-hero {
   padding: 44px clamp(18px, 5vw, 72px) 34px;
-  color: #fffaf0;
+  color: #f0f4ff;
 }
 
 .hero-label,
@@ -73,15 +73,15 @@ h2 {
 .hero-subtitle {
   max-width: 790px;
   margin-bottom: 0;
-  color: #dccfbb;
+  color: #b8cce4;
   font-size: clamp(1rem, 1.8vw, 1.25rem);
   line-height: 1.5;
 }
 
 .team-card {
-  border: 1px solid rgba(255, 250, 240, 0.22);
+  border: 1px solid rgba(240, 244, 255, 0.22);
   border-radius: 24px;
-  background: rgba(255, 250, 240, 0.08);
+  background: rgba(240, 244, 255, 0.08);
   padding: 20px;
   backdrop-filter: blur(14px);
 }
@@ -97,7 +97,7 @@ h2 {
 
 .team-names {
   margin-bottom: 0;
-  color: #fffaf0;
+  color: #f0f4ff;
   font-size: 1rem;
   line-height: 1.45;
 }
@@ -112,7 +112,7 @@ main {
 .reflection-card {
   border: 1px solid var(--line);
   border-radius: 28px;
-  background: rgba(255, 250, 240, 0.96);
+  background: rgba(240, 244, 255, 0.97);
   box-shadow: var(--shadow);
 }
 
@@ -141,7 +141,7 @@ main {
 }
 
 .data-note span {
-  color: #425148;
+  color: #2d4a6a;
   line-height: 1.4;
 }
 
@@ -167,9 +167,9 @@ main {
 label {
   display: grid;
   gap: 8px;
-  border: 1px solid #e3d8c4;
+  border: 1px solid #ccd8ee;
   border-radius: 18px;
-  background: #fffdf7;
+  background: #f5f8ff;
   padding: 13px;
 }
 
@@ -182,7 +182,7 @@ label span {
 select,
 input {
   width: 100%;
-  border: 1px solid #d8cdb8;
+  border: 1px solid #c0cfe6;
   border-radius: 12px;
   background: white;
   color: var(--ink);
@@ -218,7 +218,7 @@ input {
 .pill {
   white-space: nowrap;
   border-radius: 999px;
-  background: #fee6d4;
+  background: #dbeafe;
   color: var(--accent-dark);
   padding: 7px 11px;
   font-size: 0.78rem;
@@ -230,17 +230,17 @@ input {
   width: 100%;
   min-height: 510px;
   border-radius: 22px;
-  background: #edf1ee;
+  background: #e4ecf6;
 }
 
 .svg-label {
-  fill: #253229;
+  fill: #1a2d45;
   font-size: 14px;
   font-weight: 800;
 }
 
 .svg-source {
-  fill: #6b766f;
+  fill: #5a6a82;
   font-size: 12px;
 }
 
@@ -257,15 +257,15 @@ input {
 
 .snapshot-card {
   overflow: hidden;
-  border: 1px solid #e0d5c3;
+  border: 1px solid #ccd8ee;
   border-radius: 18px;
-  background: #fffdf8;
+  background: #f5f8ff;
 }
 
 .snapshot-image-wrap {
   position: relative;
   min-height: 130px;
-  background: #edf1ee;
+  background: #e4ecf6;
 }
 
 .snapshot-card img {
@@ -307,9 +307,9 @@ input {
   position: fixed;
   z-index: 20;
   max-width: 340px;
-  border: 1px solid rgba(22, 33, 28, 0.14);
+  border: 1px solid rgba(17, 24, 39, 0.14);
   border-radius: 14px;
-  background: rgba(255, 253, 247, 0.96);
+  background: rgba(245, 248, 255, 0.97);
   color: var(--ink);
   padding: 11px 12px;
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
@@ -322,8 +322,8 @@ input {
 .error-banner,
 .img-fallback {
   padding: 14px;
-  background: #fff0e6;
-  color: #8b3f14;
+  background: #dbeafe;
+  color: #1d4ed8;
   font-weight: 800;
   text-align: center;
 }
