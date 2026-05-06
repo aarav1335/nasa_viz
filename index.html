@@ -1,147 +1,118 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>MODIS Visualization Concepts</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="d3.v7.min.js"></script>
-  </head>
-  <body>
-    <header class="topbar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MODIS Land Surface Temperature · DSC 106 Checkpoint</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-hero">
+    <div class="hero-label">DSC 106 - Project 3</div>
+    <div class="hero-grid">
       <div>
-        <p class="eyebrow">DSC 106 Project 3</p>
-        <h1>MODIS visualization concept gallery</h1>
+        <h1>MODIS Land Surface Temperature Explorer</h1>
+        <p class="hero-subtitle">
+          Question: How does land surface temperature vary across regions and seasons?
+        </p>
       </div>
-      <p class="note">Prototype data shaped like MODIS products, ready to replace with real NASA layers.</p>
-    </header>
 
-    <nav class="tabs" aria-label="Visualization concepts">
-      <button class="tab is-active" data-view="greenness">1. Greenness</button>
-      <button class="tab" data-view="fire">3. Fire scars</button>
-      <button class="tab" data-view="change">8. Earth change</button>
-    </nav>
+      <aside class="team-card" aria-label="Team information">
+        <p class="team-title">Team Vizionary</p>
+        <p class="team-names">Jonathan Yim:  jgyim@ucsd.edu</p>
+        <p class="team-names">Isabela De La Cruz: imdelacruz@ucsd.edu</p>
+        <p class="team-names">Aarav Agrawal: a7agrawal@ucsd.edu</p>
+      </aside>
+    </div>
+  </header>
 
-    <main>
-      <section class="view is-active" id="greenness" aria-labelledby="greenness-title">
-        <div class="view-copy">
-          <p class="kicker">Option 1</p>
-          <h2 id="greenness-title">How green is the planet over the year?</h2>
-          <p>
-            A seasonal NDVI view. The map shows simulated monthly vegetation intensity by biome,
-            while the line chart compares how different places green up and fade through the year.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Month
-            <input id="month-slider" type="range" min="0" max="11" value="6" />
-            <strong id="month-label">July</strong>
-          </label>
-          <label>
-            Focus biome
-            <select id="biome-select">
-              <option value="all">All biomes</option>
-              <option value="boreal">Boreal forest</option>
-              <option value="temperate">Temperate forest</option>
-              <option value="grassland">Grassland</option>
-              <option value="desert">Desert</option>
-              <option value="tropical">Tropical forest</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>Monthly NDVI intensity</figcaption>
-            <svg id="ndvi-map" role="img" aria-label="Map-like grid colored by NDVI"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Seasonal curve by selected biome</figcaption>
-            <svg id="ndvi-chart" role="img" aria-label="Line chart of NDVI by month"></svg>
-          </figure>
-        </div>
-      </section>
-
-      <section class="view" id="fire" aria-labelledby="fire-title">
-        <div class="view-copy">
-          <p class="kicker">Option 3</p>
-          <h2 id="fire-title">Wildfire scars before and after</h2>
-          <p>
-            A before, burn, and recovery sequence. This lets viewers scrub through a fire event,
-            compare burn severity, and see vegetation rebound after the peak damage.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Event stage
-            <input id="fire-slider" type="range" min="0" max="4" value="2" />
-            <strong id="fire-label">Peak burn</strong>
-          </label>
-          <label class="toggle">
-            <input id="severity-toggle" type="checkbox" checked />
-            Show severity overlay
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>Landscape condition</figcaption>
-            <svg id="fire-map" role="img" aria-label="Fire scar map"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Vegetation loss and recovery</figcaption>
-            <svg id="fire-chart" role="img" aria-label="Line chart of burn severity and vegetation"></svg>
-          </figure>
-        </div>
-      </section>
-
-      <section class="view" id="change" aria-labelledby="change-title">
-        <div class="view-copy">
-          <p class="kicker">Option 8</p>
-          <h2 id="change-title">Two decades of Earth from MODIS</h2>
-          <p>
-            A story selector for long-term landscape change. Pick a place, move through time,
-            and compare the current snapshot against the full trend.
-          </p>
-        </div>
-
-        <div class="toolbar">
-          <label>
-            Location
-            <select id="location-select"></select>
-          </label>
-          <label>
-            Year
-            <input id="year-slider" type="range" min="2002" max="2024" value="2015" />
-            <strong id="year-label">2015</strong>
-          </label>
-        </div>
-
-        <div class="grid-two">
-          <figure class="panel">
-            <figcaption>MODIS-style yearly snapshot</figcaption>
-            <svg id="change-map" role="img" aria-label="Yearly landscape snapshot"></svg>
-          </figure>
-          <figure class="panel">
-            <figcaption>Long-term indicator trend</figcaption>
-            <svg id="change-chart" role="img" aria-label="Trend chart for selected location"></svg>
-          </figure>
-        </div>
-      </section>
-    </main>
-
-    <aside class="choice-notes">
-      <h2>How to choose</h2>
+  <main>
+    <section class="intro-card">
       <div>
-        <p><strong>Greenness</strong> is best if you want a clean, global, seasonal story.</p>
-        <p><strong>Fire scars</strong> is best if you want a dramatic before/after narrative.</p>
-        <p><strong>Earth change</strong> is best if you want a broader “MODIS over time” project with multiple case studies.</p>
+        <p class="section-kicker">Project focus</p>
+        <h2>Using NASA MODIS imagery to compare surface heat</h2>
+        <p>
+          This checkpoint version focuses only on the land surface temperature direction because it is the most reliable and visually clear part of the prototype so far.
+          The maps below use NASA GIBS WMS image layers and update based on region and date.
+        </p>
       </div>
-    </aside>
+      <div class="data-note">
+        <strong>Data source</strong>
+        <span>NASA GIBS WMS · MODIS Terra Land Surface Temperature Day</span>
+      </div>
+    </section>
 
-    <script src="main.js"></script>
-  </body>
+    <section class="controls-card" aria-label="Visualization controls">
+      <div class="control-heading">
+        <p class="section-kicker">Controls</p>
+        <h2>Change the region and date</h2>
+      </div>
+
+      <div class="controls-grid">
+        <label>
+          <span>Region</span>
+          <select id="region-select"></select>
+        </label>
+
+        <label>
+          <span>Selected date</span>
+          <input id="temp-date" type="date" value="2024-07-15" min="2016-07-30" max="2025-10-01" />
+        </label>
+      </div>
+    </section>
+
+    <section class="viz-section">
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Graph 1</p>
+            <h2>Selected-date land surface temperature</h2>
+          </div>
+          <span class="pill">Interactive draft</span>
+        </div>
+
+        <svg id="temp-main" class="map-svg" role="img" aria-label="Selected MODIS land surface temperature map"></svg>
+        <p class="caption" id="temp-caption"></p>
+      </article>
+
+      <article class="viz-card secondary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Graph 2</p>
+            <h2>Seasonal temperature snapshots</h2>
+          </div>
+          <span class="pill">Comparison draft</span>
+        </div>
+
+        <div id="temp-seasons" class="snapshot-grid"></div>
+        <p class="caption">
+          These four panels use the same region but different dates, making it easier to compare seasonal changes in surface heat.
+        </p>
+      </article>
+    </section>
+
+    <section class="reflection-card">
+      <div>
+        <p class="section-kicker">Checkpoint interpretation</p>
+        <h2>Why this direction is stronger</h2>
+      </div>
+      <div class="reflection-grid">
+        <p>
+          <strong>Clearer visual story:</strong> the temperature layer produces more readable differences across regions and seasons than the earlier NDVI and fire layers.
+        </p>
+        <p>
+          <strong>Good interaction:</strong> the region dropdown changes the spatial frame, while the date picker changes the temporal frame.
+        </p>
+        <p>
+          <strong>Next step:</strong> for the final project, this could become a more polished comparison of hot, dry, tropical, and urban regions.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="main.js"></script>
+</body>
 </html>
