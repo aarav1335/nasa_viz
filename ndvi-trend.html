@@ -34,12 +34,14 @@
         <h2>Is the Earth getting greener or browner?</h2>
         <p>
           Using <strong>NASA MODIS NDVI</strong> (Normalized Difference Vegetation Index) satellite data spanning
-          <strong>2001-2024</strong>, this visualization maps the trend in vegetation cover across
-          the globe. Each dot represents a 3°×3° grid cell; its color shows whether vegetation has
+          <strong>2001-2024</strong>, this visualization maps the linear trend in vegetation cover across
+          the globe. For each 2°×2° grid cell, we computed the per-year linear regression slope from
+          July-only NDVI measurements. Each dot's color shows whether vegetation has
           increased (green), decreased (brown), or stayed stable (tan) over two decades.
         </p>
         <p>
           <strong>Click any dot</strong> to see its full 24-year time series.
+          <strong>Shift+drag</strong> to select a region and view summary statistics.
           <strong>Use the region selector</strong> to zoom into areas of interest.
         </p>
       </div>
@@ -65,6 +67,11 @@
           <span>Show only significant trends</span>
           <input id="significance-toggle" type="checkbox" />
         </label>
+        <div class="slider-wrap" id="r2-slider-wrap">
+          <span class="slider-label">R² threshold</span>
+          <input id="r2-threshold" type="range" min="0" max="0.80" step="0.01" value="0.30" />
+          <span class="slider-value" id="r2-value">0.30</span>
+        </div>
       </div>
     </section>
 
@@ -75,6 +82,7 @@
           <div>
             <p class="graph-tag">Map</p>
             <h2>NDVI trend · July 2001–2024</h2>
+            <p class="graph-subtitle">Linear regression slope per 2° grid cell · July-only MODIS NDVI (MOD13A2)</p>
           </div>
           <span class="pill" id="map-stats">Loading…</span>
         </div>
@@ -126,22 +134,27 @@
       </div>
       <div class="reflection-grid">
         <p>
-          <strong>Discrete color bins:</strong> five distinct colors (brown through green) make it easy
-          to classify each dot at a glance — no need to estimate a continuous gradient. Thresholds align
-          with meaningful cutoffs for vegetation change.
+          <strong>Discrete color bins over continuous gradient:</strong> we tested a continuous green→brown
+          ramp first, but found it made subtle trends hard to read. Five discrete bins (brown → tan → green)
+          let viewers classify each dot at a glance. Thresholds at ±0.001 and ±0.003 NDVI/year align with
+          ecologically meaningful vegetation change rates.
         </p>
         <p>
-          <strong>Dot grid over choropleth:</strong> each 3° grid cell is its own mark, avoiding the
-          area-bias of choropleth maps (large regions dominate visually). This gives equal visual weight
-          to all locations.
+          <strong>Dot grid over choropleth:</strong> a choropleth would bias perception toward large
+          landmasses (e.g., Siberia, Sahara) purely by area. The equispaced 2°×2° dot grid gives equal
+          visual weight to every location, making regional hot-spots easier to spot.
         </p>
         <p>
-          <strong>Details-on-demand:</strong> clicking a dot reveals its full 24-year time series with a regression
-          trend line, and Shift+drag lets you lasso any region to see summary statistics for all dots inside.
+          <strong>Details-on-demand + brushing:</strong> clicking a dot reveals its real 24-year annual
+          NDVI time series with a regression trend line. Shift+drag draws a rectangular selection to show
+          aggregate stats (mean trend, greening/browning counts) for any group of cells — enabling both
+          micro and macro exploration.
         </p>
         <p>
-          <strong>Region presets:</strong> pre-selected regions guide users to the most interesting stories
-          (India's greening, Amazon's browning) while still allowing free exploration.
+          <strong>Region presets:</strong> pre-selected regions (Amazon, India, Sahel, etc.) guide users
+          to the most interesting stories while still allowing free exploration via the dropdown. Each
+          preset is motivated by real-world environmental narratives (deforestation, agricultural
+          intensification, climate-driven greening).
         </p>
       </div>
     </section>

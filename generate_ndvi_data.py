@@ -218,6 +218,10 @@ def main():
             "firstYearNdvi": [[float(v) if not np.isnan(v) else None for v in row] for row in first_ndvi],
             "lastYearNdvi": [[float(v) if not np.isnan(v) else None for v in row] for row in last_ndvi],
             "rSquared": [[float(r) if not np.isnan(r) else None for r in row] for row in r2_vals],
+            "ndviByYear": [
+                [[float(v) if not np.isnan(v) else None for v in row] for row in cube[i]]
+                for i in range(len(valid_years))
+            ],
         },
         "regions": regions,
     }

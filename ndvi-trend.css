@@ -135,6 +135,35 @@
   color: #3b82f6;
 }
 
+/* Time series data authenticity badge */
+.ts-data-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+}
+.ts-data-badge[data-real="true"] {
+  background: #d4edda;
+  color: #1B5E20;
+}
+.ts-data-badge[data-real="false"] {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Graph subtitle for data transformation info */
+.graph-subtitle {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #6a7a92;
+  font-weight: 600;
+}
+
 /* Brush summary label in time series panel */
 .brush-summary-label {
   display: flex;
@@ -298,6 +327,54 @@
   height: 22px;
   accent-color: #3b82f6;
   cursor: pointer;
+}
+
+.toggle-hint {
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  color: #8a9ab4 !important;
+  white-space: nowrap;
+}
+
+/* R² threshold slider */
+.slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #ccd8ee;
+  border-radius: 18px;
+  background: #f5f8ff;
+  padding: 10px 14px;
+  grid-column: 1 / -1;
+}
+
+.slider-label {
+  font-size: 0.83rem;
+  font-weight: 800;
+  color: #5a6a82;
+  white-space: nowrap;
+}
+
+.slider-wrap input[type="range"] {
+  flex: 1;
+  min-width: 80px;
+  height: 6px;
+  border-radius: 4px;
+  background: #dce4f0;
+  accent-color: #3b82f6;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  appearance: auto;
+}
+
+.slider-value {
+  min-width: 36px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 850;
+  color: #3b82f6;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Data meta */

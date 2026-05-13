@@ -8,6 +8,7 @@ let flatPoints = [];          // [{lon, lat, trend, firstNdvi, lastNdvi, r2, row
 let selectedPoint = null;     // currently clicked point
 let currentRegion = "global"; // active region id
 let showSignificantOnly = false;
+let r2Threshold = 0.30;       // R² threshold for significance filter
 let worldLand = null;         // TopoJSON-converted GeoJSON for world land masses
 
 /* ── Region definitions (with real-world narratives) ─────────────────── */
@@ -164,18 +165,30 @@ function hideTooltip() {
 /* ── Flatten grid data into points array ─────────────────────────────── */
 function flattenGrid(grid, metadata) {
   const points = [];
-  const { lons, lats, trends, firstYearNdvi, lastYearNdvi, rSquared } = grid;
+  const { lons, lats, trends, firstYearNdvi, lastYearNdvi, rSquared, ndviByYear } = grid;
+  const years = metadata.years;
 
   for (let row = 0; row < lats.length; row++) {
     for (let col = 0; col < lons.length; col++) {
       const trend = trends[row][col];
       if (trend != null && !isNaN(trend)) {
+        // Extract the full annual time series for this pixel (if available)
+        let ndviSeries = null;
+        if (ndviByYear && ndviByYear.length > 0) {
+          ndviSeries = ndviByYear.map(yearGrid => yearGrid[row][col]);
+          // If all values are null (ocean pixel slipped through), set to null
+          if (ndviSeries.every(v => v == null || isNaN(v))) {
+            ndviSeries = null;
+          }
+        }
+
         points.push({
           lon: lons[col],
           lat: lats[row],
           trend: trend,
           firstNdvi: firstYearNdvi[row][col],
           lastNdvi: lastYearNdvi[row][col],
+          ndviSeries: ndviSeries,
           r2: rSquared[row][col],
           row,
           col
@@ -294,7 +307,7 @@ function drawMap() {
   let visible = pointsInRegion(flatPoints, bbox);
 
   if (showSignificantOnly) {
-    visible = visible.filter(p => p.r2 != null && p.r2 > 0.3);
+    visible = visible.filter(p => p.r2 != null && p.r2 > r2Threshold);
   }
 
   // Determine dot radius based on zoom level
@@ -319,7 +332,7 @@ function drawMap() {
     .attr("fill-opacity", 0.88)
     .attr("stroke", "#fff")
     .attr("stroke-width", 0.5)
-    .on("mouseover", function(event, d) {
+    .on("mouseenter", function(event, d) {
       d3.select(this)
         .attr("fill-opacity", 1)
         .attr("stroke", "#1a1a2e")
@@ -328,21 +341,31 @@ function drawMap() {
       const [label, cls] = trendLabel(d.trend);
       showTooltip(event, `
         <strong>${d.lat.toFixed(1)}°${d.lat >= 0 ? 'N' : 'S'}, ${Math.abs(d.lon).toFixed(1)}°${d.lon >= 0 ? 'E' : 'W'}</strong><br>
-        Trend: <span class="${cls}"><strong>${(d.trend * 1000).toFixed(1)}</strong> NDVI units/decade</span><br>
+        Linear trend: <span class="${cls}"><strong>${(d.trend * 1000).toFixed(1)}</strong> NDVI/decade</span><br>
         ${label}<br>
         2001 NDVI: ${d.firstNdvi?.toFixed(3) ?? 'N/A'} → 2024 NDVI: ${d.lastNdvi?.toFixed(3) ?? 'N/A'}<br>
         R² = ${d.r2?.toFixed(2) ?? 'N/A'}
       `);
     })
-    .on("mouseout", function() {
-      d3.select(this)
-        .attr("fill-opacity", 0.88)
-        .attr("stroke", "#fff")
-        .attr("stroke-width", 0.5);
+    .on("mouseleave", function() {
+      const el = d3.select(this);
+      if (el.classed("brush-highlighted")) {
+        // Let CSS class handle the brush appearance — clear inline overrides
+        el.attr("stroke", null).attr("stroke-width", null).attr("fill-opacity", null);
+      } else if (el.classed("selected")) {
+        // Let CSS class handle the selected appearance — clear inline overrides
+        el.attr("stroke", null).attr("stroke-width", null).attr("fill-opacity", null);
+      } else {
+        el.attr("fill-opacity", 0.88)
+          .attr("stroke", "#fff")
+          .attr("stroke-width", 0.5);
+      }
       hideTooltip();
     })
     .on("click", function(event, d) {
       event.stopPropagation();
+      // If a brush selection is active, dismiss it first
+      if (brushSelectionActive) clearBrush();
       selectPoint(d);
     });
 
@@ -639,7 +662,7 @@ function drawLegend() {
   });
 
   const note = container.append("div").attr("class", "legend-label-group");
-  note.append("span").text("Each dot = 2°×2° grid cell · July NDVI trend, 2001–2024");
+  note.append("span").text("Each dot = 2°×2° grid cell · Linear regression slope · July NDVI, 2001–2024");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -650,8 +673,14 @@ let tsResizeObserver = null;
 function selectPoint(d) {
   selectedPoint = d;
 
-  // Highlight selected dot
-  d3.selectAll(".ndvi-dot").classed("selected", false);
+  // Deselect all dots, restoring default inline styles for non-selected dots
+  d3.selectAll(".ndvi-dot")
+    .classed("selected", false)
+    .attr("stroke", "#fff")
+    .attr("stroke-width", 0.5)
+    .attr("fill-opacity", 0.88);
+
+  // Mark the newly clicked dot
   d3.selectAll(".ndvi-dot")
     .filter(p => p.row === d.row && p.col === d.col)
     .classed("selected", true);
@@ -661,13 +690,20 @@ function selectPoint(d) {
   d3.select("#ts-content").style("display", "block");
 
   const years = ndviData.metadata.years;
-  const ts = synthesizeTimeSeries(d.firstNdvi, d.lastNdvi, d.trend, years);
+
+  // Use real annual NDVI data if available, otherwise synthesize
+  let ts;
+  if (d.ndviSeries && d.ndviSeries.length === years.length) {
+    ts = d.ndviSeries;
+  } else {
+    ts = synthesizeTimeSeries(d.firstNdvi, d.lastNdvi, d.trend, years);
+  }
 
   d3.select("#ts-title").text(
     `${d.lat.toFixed(1)}°${d.lat >= 0 ? 'N' : 'S'}, ${Math.abs(d.lon).toFixed(1)}°${d.lon >= 0 ? 'E' : 'W'}`
   );
 
-  drawTimeSeries(ts, years, d);
+  drawTimeSeries(ts, years, d, d.ndviSeries != null);
   drawTimeSeriesStats(d);
 }
 
@@ -679,9 +715,18 @@ function deselectPoint() {
   d3.select("#ts-title").text("Click a dot on the map");
 }
 
-function drawTimeSeries(ts, years, pointData) {
+function drawTimeSeries(ts, years, pointData, hasRealData) {
   const container = d3.select("#ts-chart");
   container.html("");
+
+  // Show a badge indicating whether these are real or reconstructed values
+  container.append("div")
+    .attr("class", "ts-data-badge")
+    .attr("data-real", hasRealData ? "true" : "false")
+    .text(hasRealData
+      ? "● Real annual NDVI measurements"
+      : "● Reconstructed trend (linear fit)"
+    );
 
   const containerWidth = container.node().clientWidth || 340;
   const margin = { top: 20, right: 16, bottom: 40, left: 42 };
@@ -888,8 +933,23 @@ function setupControls() {
     .property("checked", showSignificantOnly)
     .on("change", function() {
       showSignificantOnly = this.checked;
+      d3.select("#r2-slider-wrap").style("display", showSignificantOnly ? "flex" : "none");
       drawMap();
     });
+
+  // R² threshold slider
+  const r2Slider = d3.select("#r2-threshold");
+  const r2Label = d3.select("#r2-value");
+  r2Slider
+    .property("value", r2Threshold)
+    .on("input", function() {
+      r2Threshold = +this.value;
+      r2Label.text(r2Threshold.toFixed(2));
+      if (showSignificantOnly) drawMap();
+    });
+
+  // Hide slider initially if toggle is off
+  d3.select("#r2-slider-wrap").style("display", showSignificantOnly ? "flex" : "none");
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
