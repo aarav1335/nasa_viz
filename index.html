@@ -27,40 +27,29 @@
   </header>
 
   <main>
-    <section class="intro-card">
-      <div>
-        <p class="section-kicker">Project focus</p>
-        <h2>Using NASA MODIS imagery to compare surface heat</h2>
-        <p>
-          This checkpoint version focuses only on the land surface temperature direction because it is the most reliable and visually clear part of the prototype so far.
-          The maps below use NASA GIBS WMS image layers and update based on region and date.
-        </p>
-      </div>
-      <div class="data-note">
-        <strong>Data source</strong>
-        <span>NASA GIBS WMS · MODIS Terra Land Surface Temperature Day</span>
-      </div>
-    </section>
-
     <section class="controls-card" aria-label="Visualization controls">
-      <div class="control-heading">
-        <p class="section-kicker">Controls</p>
-        <h2>Change the region and date</h2>
-      </div>
+    <div class="controls-grid">
+      <label>
+        <span>Region</span>
+        <select id="region-select"></select>
+      </label>
+      <label>
+        <span>Year</span>
+        <select id="year-select"></select>
+      </label>
+      <label>
+        <span>Season</span>
+        <select id="season-select">
+          <option value="03">Spring (Mar)</option>
+          <option value="06">Summer (Jun)</option>
+          <option value="09">Fall (Sep)</option>
+          <option value="12">Winter (Dec)</option>
+        </select>
+      </label>
+    </div>
+      </section>
 
-      <div class="controls-grid">
-        <label>
-          <span>Region</span>
-          <select id="region-select"></select>
-        </label>
-
-        <label>
-          <span>Selected date</span>
-          <input id="temp-date" type="date" value="2024-07-15" min="2016-07-30" max="2025-10-01" />
-        </label>
-      </div>
-    </section>
-
+    <!--
     <section class="viz-section">
       <article class="viz-card primary-viz">
         <div class="viz-header">
@@ -108,6 +97,35 @@
         </p>
       </div>
     </section>
+    -->
+
+    <!-- Side by side visualization potential final-->
+     <section class="viz-section side-by-side">
+
+      <!--Existing temperature map-->
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Temperature 🌡️</p>
+            <h2>Land Surface Temperature</h2>
+          </div>
+        </div>
+        <svg id="temp-main" class="map-svg"></svg>
+        <p class="caption" id="temp-caption"></p>
+      </article>
+
+      <!--Vegetation map-->
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Vegetation 🌱</p>
+            <h2>Enhanced Vegetation Index (EVI)</h2>
+          </div>
+        </div>
+        <svg id="veg-main" class="map-svg"></svg>
+        <p class="caption" id="veg-caption"></p>
+      </article>
+     </section>
   </main>
 
   <div id="tooltip" class="tooltip" aria-hidden="true"></div>

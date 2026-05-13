@@ -365,3 +365,9 @@ input {
     font-size: clamp(2.4rem, 14vw, 4.2rem);
   }
 }
+
+.side-by-side{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
