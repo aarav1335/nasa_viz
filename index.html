@@ -3,23 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MODIS Land Surface Temperature · DSC 106 Checkpoint</title>
+
+  <title>Temperature & Vegetation Explorer · DSC 106 Project 3</title>
+
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
   <header class="site-hero">
     <div class="hero-label">DSC 106 - Project 3</div>
+
     <div class="hero-grid">
       <div>
         <h1>MODIS Land Surface Temperature Explorer</h1>
+
         <p class="hero-subtitle">
-          Question: How does land surface temperature vary across regions and seasons?
+          Question: How does land surface temperature vary across regions and seasons, and how does it compare with vegetation patterns?
         </p>
+
+        <nav class="page-nav">
+          <a href="index.html" class="nav-link active">Temperature & Vegetation Explorer</a>
+          <a href="ndvi-trend.html" class="nav-link">NDVI Trend Map →</a>
+        </nav>
       </div>
 
       <aside class="team-card" aria-label="Team information">
         <p class="team-title">Team Vizionary</p>
-        <p class="team-names">Jonathan Yim:  jgyim@ucsd.edu</p>
+        <p class="team-names">Jonathan Yim: jgyim@ucsd.edu</p>
         <p class="team-names">Isabela De La Cruz: imdelacruz@ucsd.edu</p>
         <p class="team-names">Aarav Agrawal: a7agrawal@ucsd.edu</p>
       </aside>
@@ -27,105 +37,148 @@
   </header>
 
   <main>
-    <section class="controls-card" aria-label="Visualization controls">
-    <div class="controls-grid">
-      <label>
-        <span>Region</span>
-        <select id="region-select"></select>
-      </label>
-      <label>
-        <span>Year</span>
-        <select id="year-select"></select>
-      </label>
-      <label>
-        <span>Season</span>
-        <select id="season-select">
-          <option value="03">Spring (Mar)</option>
-          <option value="06">Summer (Jun)</option>
-          <option value="09">Fall (Sep)</option>
-          <option value="12">Winter (Dec)</option>
-        </select>
-      </label>
-    </div>
-      </section>
+    <section class="intro-card">
+      <div>
+        <p class="section-kicker">The question</p>
+        <h2>How do surface temperature and vegetation patterns vary across place and season?</h2>
+        <p>
+          This visualization uses NASA MODIS imagery to compare land surface temperature and Enhanced Vegetation Index (EVI)
+          across selected world regions. By changing the region, year, and season, users can explore how surface heat and
+          vegetation patterns shift across different environments.
+        </p>
+      </div>
 
-    <!--
-    <section class="viz-section">
+      <div class="data-note">
+        <strong>Data source</strong>
+        <span>NASA GIBS · MODIS land surface temperature and vegetation imagery</span>
+        <span class="data-meta">Interactive region, year, and season comparison</span>
+      </div>
+    </section>
+
+    <section class="controls-card" aria-label="Visualization controls">
+      <div class="control-heading">
+        <p class="section-kicker">Controls</p>
+        <h2>Explore by region, year, and season</h2>
+      </div>
+
+      <div class="controls-grid">
+        <label>
+          <span>Region</span>
+          <select id="region-select"></select>
+        </label>
+
+        <label>
+          <span>Year</span>
+          <select id="year-select"></select>
+        </label>
+
+        <label>
+          <span>Season</span>
+          <select id="season-select">
+            <option value="03">Spring (Mar)</option>
+            <option value="06">Summer (Jun)</option>
+            <option value="09">Fall (Sep)</option>
+            <option value="12">Winter (Dec)</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="viz-section side-by-side">
       <article class="viz-card primary-viz">
         <div class="viz-header">
           <div>
-            <p class="graph-tag">Graph 1</p>
-            <h2>Selected-date land surface temperature</h2>
+            <p class="graph-tag">Temperature</p>
+            <h2>Land Surface Temperature</h2>
           </div>
-          <span class="pill">Interactive draft</span>
         </div>
 
         <svg id="temp-main" class="map-svg" role="img" aria-label="Selected MODIS land surface temperature map"></svg>
         <p class="caption" id="temp-caption"></p>
       </article>
 
-      <article class="viz-card secondary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Graph 2</p>
-            <h2>Seasonal temperature snapshots</h2>
-          </div>
-          <span class="pill">Comparison draft</span>
-        </div>
-
-        <div id="temp-seasons" class="snapshot-grid"></div>
-        <p class="caption">
-          These four panels use the same region but different dates, making it easier to compare seasonal changes in surface heat.
-        </p>
-      </article>
-    </section>
-
-    <section class="reflection-card">
-      <div>
-        <p class="section-kicker">Checkpoint interpretation</p>
-        <h2>Why this direction is stronger</h2>
-      </div>
-      <div class="reflection-grid">
-        <p>
-          <strong>Clearer visual story:</strong> the temperature layer produces more readable differences across regions and seasons than the earlier NDVI and fire layers.
-        </p>
-        <p>
-          <strong>Good interaction:</strong> the region dropdown changes the spatial frame, while the date picker changes the temporal frame.
-        </p>
-        <p>
-          <strong>Next step:</strong> for the final project, this could become a more polished comparison of hot, dry, tropical, and urban regions.
-        </p>
-      </div>
-    </section>
-    -->
-
-    <!-- Side by side visualization potential final-->
-     <section class="viz-section side-by-side">
-
-      <!--Existing temperature map-->
       <article class="viz-card primary-viz">
         <div class="viz-header">
           <div>
-            <p class="graph-tag">Temperature 🌡️</p>
-            <h2>Land Surface Temperature</h2>
-          </div>
-        </div>
-        <svg id="temp-main" class="map-svg"></svg>
-        <p class="caption" id="temp-caption"></p>
-      </article>
-
-      <!--Vegetation map-->
-      <article class="viz-card primary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Vegetation 🌱</p>
+            <p class="graph-tag">Vegetation</p>
             <h2>Enhanced Vegetation Index (EVI)</h2>
           </div>
         </div>
-        <svg id="veg-main" class="map-svg"></svg>
+
+        <svg id="veg-main" class="map-svg" role="img" aria-label="Selected MODIS enhanced vegetation index map"></svg>
         <p class="caption" id="veg-caption"></p>
       </article>
-     </section>
+    </section>
+
+    <section class="reflection-card writeup-card">
+      <div>
+        <p class="section-kicker">Design rationale</p>
+        <h2>Why this visualization works</h2>
+      </div>
+
+      <div class="writeup-text">
+        <p>
+          This visualization compares land surface temperature and vegetation patterns across regions, years, and seasons.
+          We chose a paired-map layout because the main goal is comparison: users can view temperature and Enhanced
+          Vegetation Index (EVI) side by side for the same region and time period. This makes it easier to see whether
+          hotter land surface conditions correspond with lower vegetation density, stronger seasonal contrast, or regional
+          differences in surface cover.
+        </p>
+
+        <p>
+          The primary visual encoding is geographic color imagery from NASA MODIS layers. This choice works well because
+          both temperature and vegetation are spatial phenomena, and map-based color patterns allow users to quickly identify
+          broad environmental differences across a region. We considered using a scatterplot of temperature versus vegetation,
+          but that would have removed the geographic context. Since the project question focuses on how patterns vary across
+          regions and seasons, preserving spatial context was more important than showing only a statistical relationship.
+        </p>
+
+        <p>
+          The interaction design uses region, year, and season controls as dynamic filters. These controls let users focus
+          on one geographic area and time period at a time instead of being overwhelmed by the full global dataset. The
+          seasonal selector is especially important because land surface temperature and vegetation both change throughout
+          the year. By switching between spring, summer, fall, and winter, users can explore temporal variation without
+          needing to compare many separate static maps.
+        </p>
+
+        <p>
+          The two-map layout also supports a clear visual task: compare the same place across two environmental variables.
+          Temperature is shown on the left and vegetation is shown on the right, so users can scan horizontally to identify
+          whether the patterns align or diverge. This structure keeps the page focused and avoids making users switch
+          between separate tabs or hidden layers to compare the two variables.
+        </p>
+
+        <p>
+          From a data transformation perspective, the visualization uses NASA GIBS imagery for selected MODIS layers and
+          filters the map by bounding boxes for each region. Instead of downloading and plotting every raw pixel manually,
+          the visualization requests map layers for the selected region, date, and variable. This keeps the interaction
+          responsive while still allowing users to explore meaningful spatial and seasonal patterns in the MODIS dataset.
+        </p>
+
+        <h3>Development process</h3>
+
+        <p>
+          Our team split the work across data exploration, interface design, and D3 implementation. One part of the group
+          explored the MODIS dataset and identified which variables would best support the project question. Another part
+          focused on building the webpage layout, region controls, and visual styling. The D3 implementation involved
+          connecting the dropdown controls to NASA GIBS requests, rendering the selected map layers, and updating the
+          captions based on user input.
+        </p>
+
+        <p>
+          The most time-consuming parts were scoping the project and making the interactions reliable. We initially considered
+          showing more variables and more regions, but narrowed the visualization to land surface temperature and EVI so the
+          final page stayed focused. We also spent time testing different region bounding boxes and dates to make sure the
+          selected views loaded consistently and showed interpretable patterns. Overall, the development process was iterative:
+          we started with exploratory maps, chose the clearest comparison, and then refined the controls and page layout around
+          that question.
+        </p>
+
+        <p class="next-link-wrap">
+          <a href="ndvi-trend.html" class="next-link">Continue to NDVI Trend Map →</a>
+        </p>
+      </div>
+    </section>
   </main>
 
   <div id="tooltip" class="tooltip" aria-hidden="true"></div>

@@ -2,21 +2,34 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>NDVI Trends · Where is the World Getting Greener?</title>
+
   <link rel="stylesheet" href="styles.css" />
+
   <link rel="stylesheet" href="ndvi-trend.css" />
 </head>
+
 <body>
   <header class="site-hero">
     <div class="hero-label">DSC 106 · Project 3</div>
+
     <div class="hero-grid">
       <div>
         <h1>Where is the World Getting Greener or Browner?</h1>
+
         <p class="hero-subtitle">
           Explore 24 years of NASA satellite vegetation data. Discover which regions are gaining vegetation cover--and which are losing it.
         </p>
+
+        <nav class="page-nav">
+          <a href="index.html" class="nav-link">← Temperature & Vegetation Explorer</a>
+          <a href="ndvi-trend.html" class="nav-link active">NDVI Trend Map</a>
+        </nav>
       </div>
+
       <aside class="team-card" aria-label="Team information">
         <p class="team-title">Team Vizionary</p>
         <p class="team-names">Jonathan Yim · jgyim@ucsd.edu</p>
@@ -27,11 +40,12 @@
   </header>
 
   <main>
-    <!-- Intro -->
     <section class="intro-card">
       <div>
         <p class="section-kicker">The question</p>
+
         <h2>Is the Earth getting greener or browner?</h2>
+
         <p>
           Using <strong>NASA MODIS NDVI</strong> (Normalized Difference Vegetation Index) satellite data spanning
           <strong>2001-2024</strong>, this visualization maps the linear trend in vegetation cover across
@@ -39,12 +53,14 @@
           July-only NDVI measurements. Each dot's color shows whether vegetation has
           increased (green), decreased (brown), or stayed stable (tan) over two decades.
         </p>
+
         <p>
           <strong>Click any dot</strong> to see its full 24-year time series.
           <strong>Shift+drag</strong> to select a region and view summary statistics.
           <strong>Use the region selector</strong> to zoom into areas of interest.
         </p>
       </div>
+
       <div class="data-note">
         <strong>Data source</strong>
         <span>NASA GIBS · MODIS Terra 16-Day NDVI Composites (MOD13A2)</span>
@@ -52,21 +68,24 @@
       </div>
     </section>
 
-    <!-- Controls -->
     <section class="controls-card" aria-label="Visualization controls">
       <div class="control-heading">
         <p class="section-kicker">Controls</p>
+
         <h2>Explore the trends</h2>
       </div>
+
       <div class="controls-grid">
         <label>
           <span>Region</span>
           <select id="region-select"></select>
         </label>
+
         <label class="toggle-label">
           <span>Show only significant trends</span>
           <input id="significance-toggle" type="checkbox" />
         </label>
+
         <div class="slider-wrap" id="r2-slider-wrap">
           <span class="slider-label">R² threshold</span>
           <input id="r2-threshold" type="range" min="0" max="0.80" step="0.01" value="0.30" />
@@ -75,38 +94,45 @@
       </div>
     </section>
 
-    <!-- Main Viz -->
     <section class="viz-section ndvi-viz-section">
       <article class="viz-card ndvi-map-card">
         <div class="viz-header">
           <div>
             <p class="graph-tag">Map</p>
+
             <h2>NDVI trend · July 2001–2024</h2>
+
             <p class="graph-subtitle">Linear regression slope per 2° grid cell · July-only MODIS NDVI (MOD13A2)</p>
           </div>
+
           <span class="pill" id="map-stats">Loading…</span>
         </div>
+
         <div class="map-container">
           <svg id="ndvi-map" class="map-svg ndvi-map-svg" role="img" aria-label="Global NDVI trend map"></svg>
+
           <div class="ndvi-legend" id="ndvi-legend" aria-hidden="true"></div>
         </div>
       </article>
 
-      <!-- Side panel: Time series -->
       <article class="viz-card ts-card" id="ts-panel">
         <div class="viz-header">
           <div>
             <p class="graph-tag">Time series</p>
+
             <h2 id="ts-title">Click a dot on the map</h2>
           </div>
         </div>
+
         <div class="ts-placeholder" id="ts-placeholder">
           <svg class="ts-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="12" r="3"/>
             <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
           </svg>
+
           <p>Click any colored dot on the map to see how NDVI changed at that location over 24 years.</p>
         </div>
+
         <div class="ts-content" id="ts-content" style="display:none">
           <div id="ts-chart"></div>
           <div class="ts-stats" id="ts-stats"></div>
@@ -114,65 +140,99 @@
       </article>
     </section>
 
-    <!-- Regional Highlights -->
     <section class="viz-card highlights-card">
       <div class="viz-header">
         <div>
           <p class="graph-tag">Regional highlights</p>
+
           <h2>Stories the data tells</h2>
         </div>
+
         <span class="pill">Click to explore</span>
       </div>
+
       <div class="highlights-grid" id="highlights-grid"></div>
     </section>
 
-    <!-- Write-up -->
-    <section class="reflection-card">
+    <section class="reflection-card writeup-card">
       <div>
         <p class="section-kicker">Design rationale</p>
+
         <h2>Why this visualization works</h2>
       </div>
-      <div class="reflection-grid">
-        <p>
-          <strong>Discrete color bins over continuous gradient:</strong> we tested a continuous green→brown
-          ramp first, but found it made subtle trends hard to read. Five discrete bins (brown → tan → green)
-          let viewers classify each dot at a glance. Thresholds at ±0.001 and ±0.003 NDVI/year align with
-          ecologically meaningful vegetation change rates.
-        </p>
-        <p>
-          <strong>Dot grid over choropleth:</strong> a choropleth would bias perception toward large
-          landmasses (e.g., Siberia, Sahara) purely by area. The equispaced 2°×2° dot grid gives equal
-          visual weight to every location, making regional hot-spots easier to spot.
-        </p>
-        <p>
-          <strong>Details-on-demand + brushing:</strong> clicking a dot reveals its real 24-year annual
-          NDVI time series with a regression trend line. Shift+drag draws a rectangular selection to show
-          aggregate stats (mean trend, greening/browning counts) for any group of cells — enabling both
-          micro and macro exploration.
-        </p>
-        <p>
-          <strong>Region presets:</strong> pre-selected regions (Amazon, India, Sahel, etc.) guide users
-          to the most interesting stories while still allowing free exploration via the dropdown. Each
-          preset is motivated by real-world environmental narratives (deforestation, agricultural
-          intensification, climate-driven greening).
-        </p>
-      </div>
-    </section>
 
-    <section class="reflection-card process-card">
-      <div>
-        <p class="section-kicker">Development process</p>
-        <h2>How we built it</h2>
-      </div>
-      <div class="reflection-grid">
+      <div class="writeup-text">
         <p>
-          <strong>Data pipeline:</strong> we fetched MODIS NDVI imagery from NASA GIBS for July of each
-          year 2001–2024, extracted numerical NDVI values from the color-mapped PNGs, and computed
-          per-pixel linear regression slopes.
+          This visualization focuses on long-term vegetation change by mapping MODIS NDVI trends from 2001 to 2024.
+          Instead of showing a single year or seasonal snapshot, the graph summarizes whether each location has become
+          greener, browner, or relatively stable over time. This design choice supports the central question of whether
+          the Earth is getting greener or browner, while still allowing users to investigate regional differences.
         </p>
+
         <p>
-          <strong>D3.js implementation:</strong> the map uses an equirectangular projection with SVG
-          circle marks. Interactions use D3's brush, zoom, and event handling.
+          We chose a dot-grid map rather than a choropleth map because each dot represents the same type of spatial unit:
+          a 2°×2° grid cell. This avoids giving too much visual weight to physically large land areas and makes each sampled
+          location easier to compare. A choropleth map could make large regions such as Siberia or the Sahara dominate the
+          viewer’s attention, even if the strongest trend signals occur elsewhere. The dot grid gives a cleaner overview of
+          where vegetation trends are concentrated.
+        </p>
+
+        <p>
+          Color encodes the direction and strength of the NDVI trend. Brown indicates browning or vegetation decline, green
+          indicates greening or vegetation increase, and tan indicates relative stability. We used discrete color bins instead
+          of a continuous gradient because the main task is classification: users should be able to quickly recognize which
+          locations are strongly greening, mildly greening, stable, mildly browning, or strongly browning. The thresholded
+          palette makes the map easier to interpret at a glance.
+        </p>
+
+        <p>
+          The main interactions are region selection, significance filtering, tooltips, point selection, and brushing. The
+          region dropdown helps users quickly zoom into meaningful environmental case studies such as the Amazon, India, the
+          Sahel, California, and the boreal region. The significance filter allows users to focus on points with stronger model
+          fit, reducing visual noise when users want more confident trend patterns. Tooltips provide details-on-demand, while
+          clicking a dot opens the full 24-year NDVI time series for that location.
+        </p>
+
+        <p>
+          The time-series panel is important because it connects the map-level trend to the underlying temporal data. Without
+          it, the viewer would only see the final trend classification and might not understand whether the pattern is steady,
+          noisy, or driven by a few extreme years. Showing the annual NDVI values and regression line lets users verify the
+          trend behind each dot and compare local patterns against the broader map.
+        </p>
+
+        <p>
+          The regional highlights section adds guided interpretation without removing user freedom. The map supports open-ended
+          exploration, but the highlights direct users toward meaningful environmental stories such as Amazon deforestation,
+          agricultural intensification in India, and climate-driven greening in northern latitudes. This helps the visualization
+          work both as an exploratory tool and as an explanatory climate-data story.
+        </p>
+
+        <h3>Development process</h3>
+
+        <p>
+          Our development process began with exploring NASA MODIS NDVI data and deciding how to transform a time-based satellite
+          dataset into an interpretable interactive map. We focused on July-only NDVI values from 2001 to 2024 so that the trend
+          calculation compared the same seasonal window across years. For each grid cell, we computed a linear regression slope
+          to estimate whether vegetation increased, decreased, or remained stable over time.
+        </p>
+
+        <p>
+          The implementation was built in D3 using SVG marks, an equirectangular projection, and interactive event handling.
+          One part of the team focused on the data pipeline and trend calculation, while another part focused on the interface,
+          map rendering, color scale, and interaction design. The most time-consuming parts were converting the NDVI data into
+          a format that could load efficiently in the browser, choosing thresholds that made the trend categories readable, and
+          debugging interactions such as click-to-select, brushing, and region filtering.
+        </p>
+
+        <p>
+          We also iterated on the visual design after testing early versions. A continuous color ramp made subtle trends difficult
+          to classify, so we switched to five discrete bins. We also kept the regional highlights section because it helped users
+          connect the abstract NDVI trend values to real environmental narratives. The final version balances overview, filtering,
+          details-on-demand, and guided storytelling.
+        </p>
+
+        <p class="next-link-wrap">
+          <a href="index.html" class="next-link">← Back to Temperature & Vegetation Explorer</a>
         </p>
       </div>
     </section>
@@ -181,7 +241,9 @@
   <div id="tooltip" class="tooltip" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
   <script src="ndvi-trend.js"></script>
 </body>
 </html>

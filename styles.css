@@ -102,6 +102,42 @@ h2 {
   line-height: 1.45;
 }
 
+.page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.nav-link,
+.next-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(240, 244, 255, 0.28);
+  border-radius: 999px;
+  padding: 10px 16px;
+  background: rgba(240, 244, 255, 0.1);
+  color: #f0f4ff;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.92rem;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-link:hover,
+.next-link:hover {
+  transform: translateY(-1px);
+  background: rgba(240, 244, 255, 0.18);
+  border-color: rgba(240, 244, 255, 0.45);
+}
+
+.nav-link.active {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
 main {
   padding: 0 clamp(18px, 5vw, 72px) 60px;
 }
@@ -143,6 +179,14 @@ main {
 .data-note span {
   color: #2d4a6a;
   line-height: 1.4;
+}
+
+.data-meta {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #4a6a8a;
+  font-weight: 600;
 }
 
 .controls-card {
@@ -213,6 +257,13 @@ input {
 .viz-header h2 {
   margin-bottom: 0;
   font-size: clamp(1.3rem, 2vw, 2rem);
+}
+
+.graph-subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .pill {
@@ -303,6 +354,43 @@ input {
   padding-left: 13px;
 }
 
+.writeup-card {
+  align-items: start;
+}
+
+.writeup-text {
+  display: grid;
+  gap: 14px;
+}
+
+.writeup-text p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.writeup-text h3 {
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+.next-link-wrap {
+  margin-top: 12px;
+}
+
+.next-link {
+  width: fit-content;
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}
+
+.next-link:hover {
+  background: #2563eb;
+}
+
 .tooltip {
   position: fixed;
   z-index: 20;
@@ -336,6 +424,12 @@ input {
   font-size: 0.84rem;
 }
 
+.side-by-side {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 @media (max-width: 1050px) {
   .hero-grid,
   .intro-card,
@@ -364,10 +458,14 @@ input {
   h1 {
     font-size: clamp(2.4rem, 14vw, 4.2rem);
   }
-}
 
-.side-by-side{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  .page-nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-link,
+  .next-link {
+    width: 100%;
+  }
 }
