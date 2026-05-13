@@ -401,6 +401,7 @@ function drawMap() {
   let brushStart = null;
   let brushRect = null;
   let brushedDots = [];
+  let brushSelectionActive = false; // prevents click handler from wiping stats
 
   function brushCoords(event) {
     // Manual coordinate calculation — more reliable than d3.pointer
@@ -482,6 +483,7 @@ function drawMap() {
   }
 
   function clearBrush() {
+    brushSelectionActive = false;
     if (brushRect) { brushRect.remove(); brushRect = null; }
     brushStart = null;
     brushedDots = [];
@@ -514,6 +516,16 @@ function drawMap() {
     const w = Math.abs(mx - brushStart[0]);
     const h = Math.abs(my - brushStart[1]);
     brushRect.attr("x", x).attr("y", y).attr("width", w).attr("height", h);
+
+    // Live preview: show dot count while still dragging
+    if (w > 8 || h > 8) {
+      const preview = dotsInBrush(x, y, w, h);
+      d3.select("#ts-title").text(
+        preview.length > 0
+          ? `${preview.length} dot${preview.length !== 1 ? 's' : ''} in selection…`
+          : "No dots in selection"
+      );
+    }
   }
 
   function onBrushUp(event) {
@@ -537,6 +549,7 @@ function drawMap() {
       .classed("brush-highlighted", true)
       .raise();
 
+    brushSelectionActive = true;
     showBrushStats(brushedDots);
   }
 
@@ -558,8 +571,9 @@ function drawMap() {
   svgNode._escHandler = (e) => { if (e.key === "Escape") clearBrush(); };
   document.addEventListener("keydown", svgNode._escHandler);
 
-  // Click on empty space to deselect (only if not dragging)
+  // Click on empty space to deselect (only if not dragging or brushing)
   svg.on("click", (event) => {
+    if (brushSelectionActive) return;
     if (event.target === svg.node() || event.target.tagName === 'rect') {
       deselectPoint();
     }
