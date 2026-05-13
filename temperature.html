@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Earth Surface Change Explorer · DSC 106 Project 3</title>
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="site-hero">
+    <div class="hero-label">DSC 106 · Project 3</div>
+
+    <div class="hero-grid">
+      <div>
+        <h1>Earth Surface Change Explorer</h1>
+
+        <p class="hero-subtitle">
+          An interactive NASA MODIS project exploring how Earth’s surface temperature and vegetation patterns vary across regions, seasons, and time.
+        </p>
+
+        <nav class="page-nav" aria-label="Project pages">
+          <a href="index.html" class="nav-link">← NDVI Greening/Browning Trends</a>
+          <a href="temperature.html" class="nav-link active">Temperature & Vegetation</a>
+        </nav>
+      </div>
+
+      <aside class="team-card" aria-label="Team information">
+        <p class="team-title">Team Vizionary</p>
+        <p class="team-names">Jonathan Yim · jgyim@ucsd.edu</p>
+        <p class="team-names">Isabela De La Cruz · imdelacruz@ucsd.edu</p>
+        <p class="team-names">Aarav Agrawal · a7agrawal@ucsd.edu</p>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="question-card">
+      <div>
+        <p class="section-kicker">Visualization 1</p>
+        <h2>How do land surface temperature and vegetation patterns vary across regions and seasons?</h2>
+        <p>
+          This visualization compares NASA MODIS land surface temperature and Enhanced Vegetation Index (EVI)
+          imagery across selected regions. By changing the region, year, and season, users can explore how surface
+          heat and vegetation patterns shift across different environments.
+        </p>
+      </div>
+
+      <div class="data-note">
+        <strong>Data source</strong>
+        <span>NASA GIBS · MODIS land surface temperature and vegetation imagery</span>
+        <span class="data-meta">Interactive region, year, and season comparison</span>
+      </div>
+    </section>
+
+    <section class="controls-card" aria-label="Visualization controls">
+      <div class="control-heading">
+        <p class="section-kicker">Controls</p>
+        <h2>Explore the map views</h2>
+      </div>
+
+      <div class="controls-grid three-controls">
+        <label>
+          <span>Region</span>
+          <select id="region-select"></select>
+        </label>
+
+        <label>
+          <span>Year</span>
+          <select id="year-select"></select>
+        </label>
+
+        <label>
+          <span>Season</span>
+          <select id="season-select">
+            <option value="03">Spring (Mar)</option>
+            <option value="06">Summer (Jun)</option>
+            <option value="09">Fall (Sep)</option>
+            <option value="12">Winter (Dec)</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section class="viz-section two-column-viz" aria-label="Temperature and vegetation maps">
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Temperature</p>
+            <h2>Land Surface Temperature</h2>
+          </div>
+        </div>
+
+        <svg id="temp-main" class="map-svg" role="img" aria-label="Selected MODIS land surface temperature map"></svg>
+        <p class="caption" id="temp-caption"></p>
+      </article>
+
+      <article class="viz-card primary-viz">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Vegetation</p>
+            <h2>Enhanced Vegetation Index (EVI)</h2>
+          </div>
+        </div>
+
+        <svg id="veg-main" class="map-svg" role="img" aria-label="Selected MODIS enhanced vegetation index map"></svg>
+        <p class="caption" id="veg-caption"></p>
+      </article>
+    </section>
+
+    <section class="viz-card snapshots-card">
+      <div class="viz-header">
+        <div>
+          <p class="graph-tag">Seasonal snapshots</p>
+          <h2>Temperature changes across the year</h2>
+          <p class="graph-subtitle">
+            These snapshots provide a quick seasonal comparison for the selected region.
+          </p>
+        </div>
+      </div>
+
+      <div id="temp-seasons" class="snapshot-grid" aria-label="Seasonal temperature snapshots"></div>
+    </section>
+
+    <section class="writeup-card">
+      <div class="writeup-heading">
+        <p class="section-kicker">Design Rationale</p>
+        <h2>Writeup</h2>
+      </div>
+
+      <div class="writeup-text">
+        <p>
+          This visualization explores how land surface temperature and vegetation density vary across regions and seasons using satellite imagery from the NASA MODIS dataset. The central question driving our design was: How has vegetation density (greenness coverage) changed across Earth over time, and how does it relate to surface temperature?
+        </p>
+
+        <h3>Rationale for Visual Encoding</h3>
+
+        <p>
+          We chose satellite map imagery as our primary visual encoding because the raw MODIS data is inherently spatial, making other options like the choropleth or scatter plot lose geographic texture that highlights regional patterns. For vegetation (EVI), the natural green-to-grey color scale intuitively maps to vegetation density. For land surface temperature, a heat-mapped color gradient allows viewers to immediately perceive thermal patterns (like the coastal-to-inland contrast in California).
+        </p>
+
+        <h3>Rationale for Layout</h3>
+
+        <p>
+          Placing Land Surface Temperature and Enhanced Vegetation Index side-by-side on the same spatial extent lets users visually correlate the two variables: for example, noticing how high-temperature inland regions correspond to low vegetation index values.
+        </p>
+
+        <h3>Rationale for Interaction Techniques</h3>
+
+        <p>
+          We implemented three dynamic query controls: Region, Year, and Season. These allow users to segment the data along the dimensions most relevant to environmental change. A dropdown for region focuses attention on a specific area, the year selector enables temporal comparison across the 25-year MODIS record, and the season filter makes it easy to compare summer vs. winter conditions without needing to manually track dates. We considered using a continuous time slider instead of a year dropdown, but found that some missing/corrupted images in the MODIS dataset would appear more often when interacting with time continuously, which can be avoided by using discrete values like in our dropdown selector. 
+        </p>
+
+        <h3>Alternatives Considered</h3>
+
+        <p>
+          We tentatively proposed a 3D rotatable globe with a year slider (in our checkpoint). However, we moved away from this because rendering a 3D globe in D3.js added significant complexity without much insight gain. Further, side-by-side map panels for temperature and vegetation proved more effective for direct comparison between two variables than a single globe view. With this new approach, we added the interactive dimension of different regions so the visual benefit of a 3D globe was not compromised. We also considered displaying NDVI instead of EVI, but stuck to EVI since it is less susceptible to atmospheric distortion and better captures dense canopy areas.
+        </p>
+
+        <p class="next-link-wrap">
+          <a href="index.html" class="next-link">← Back to NDVI Greening/Browning Trends</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip" aria-hidden="true"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="main.js"></script>
+</body>
+</html>
