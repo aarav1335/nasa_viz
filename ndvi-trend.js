@@ -933,7 +933,7 @@ function setupControls() {
     .property("checked", showSignificantOnly)
     .on("change", function() {
       showSignificantOnly = this.checked;
-      d3.select("#r2-slider-wrap").style("display", showSignificantOnly ? "flex" : "none");
+      d3.select("#r2-slider-wrap").classed("active", showSignificantOnly);
       drawMap();
     });
 
@@ -948,8 +948,8 @@ function setupControls() {
       if (showSignificantOnly) drawMap();
     });
 
-  // Hide slider initially if toggle is off
-  d3.select("#r2-slider-wrap").style("display", showSignificantOnly ? "flex" : "none");
+  // Show/hide slider based on initial toggle state
+  d3.select("#r2-slider-wrap").classed("active", showSignificantOnly);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════

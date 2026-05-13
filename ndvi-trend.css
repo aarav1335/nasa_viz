@@ -336,9 +336,9 @@
   white-space: nowrap;
 }
 
-/* R² threshold slider */
+/* R² threshold slider — hidden by default; shown via .active class */
 .slider-wrap {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 10px;
   border: 1px solid #ccd8ee;
@@ -346,6 +346,9 @@
   background: #f5f8ff;
   padding: 10px 14px;
   grid-column: 1 / -1;
+}
+.slider-wrap.active {
+  display: flex;
 }
 
 .slider-label {
