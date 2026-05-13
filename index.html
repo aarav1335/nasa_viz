@@ -2,135 +2,235 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MODIS Land Surface Temperature · DSC 106 Checkpoint</title>
+
+  <title>Earth Surface Change Explorer · NDVI Trends</title>
+
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="ndvi-trend.css" />
 </head>
+
 <body>
   <header class="site-hero">
-    <div class="hero-label">DSC 106 - Project 3</div>
+    <div class="hero-label">DSC 106 · Project 3</div>
+
     <div class="hero-grid">
       <div>
-        <h1>MODIS Land Surface Temperature Explorer</h1>
+        <h1>Earth Surface Change Explorer</h1>
+
         <p class="hero-subtitle">
-          Question: How does land surface temperature vary across regions and seasons?
+          An interactive NASA MODIS project exploring how Earth’s surface temperature and vegetation patterns vary across regions, seasons, and time.
         </p>
+
+        <nav class="page-nav" aria-label="Project pages">
+          <a href="index.html" class="nav-link active">NDVI Greening/Browning Trends</a>
+          <a href="temperature.html" class="nav-link">Temperature & Vegetation →</a>
+        </nav>
       </div>
 
       <aside class="team-card" aria-label="Team information">
         <p class="team-title">Team Vizionary</p>
-        <p class="team-names">Jonathan Yim:  jgyim@ucsd.edu</p>
-        <p class="team-names">Isabela De La Cruz: imdelacruz@ucsd.edu</p>
-        <p class="team-names">Aarav Agrawal: a7agrawal@ucsd.edu</p>
+        <p class="team-names">Jonathan Yim · jgyim@ucsd.edu</p>
+        <p class="team-names">Isabela De La Cruz · imdelacruz@ucsd.edu</p>
+        <p class="team-names">Aarav Agrawal · a7agrawal@ucsd.edu</p>
       </aside>
     </div>
   </header>
 
   <main>
-    <section class="controls-card" aria-label="Visualization controls">
-    <div class="controls-grid">
-      <label>
-        <span>Region</span>
-        <select id="region-select"></select>
-      </label>
-      <label>
-        <span>Year</span>
-        <select id="year-select"></select>
-      </label>
-      <label>
-        <span>Season</span>
-        <select id="season-select">
-          <option value="03">Spring (Mar)</option>
-          <option value="06">Summer (Jun)</option>
-          <option value="09">Fall (Sep)</option>
-          <option value="12">Winter (Dec)</option>
-        </select>
-      </label>
-    </div>
-      </section>
-
-    <!--
-    <section class="viz-section">
-      <article class="viz-card primary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Graph 1</p>
-            <h2>Selected-date land surface temperature</h2>
-          </div>
-          <span class="pill">Interactive draft</span>
-        </div>
-
-        <svg id="temp-main" class="map-svg" role="img" aria-label="Selected MODIS land surface temperature map"></svg>
-        <p class="caption" id="temp-caption"></p>
-      </article>
-
-      <article class="viz-card secondary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Graph 2</p>
-            <h2>Seasonal temperature snapshots</h2>
-          </div>
-          <span class="pill">Comparison draft</span>
-        </div>
-
-        <div id="temp-seasons" class="snapshot-grid"></div>
-        <p class="caption">
-          These four panels use the same region but different dates, making it easier to compare seasonal changes in surface heat.
-        </p>
-      </article>
-    </section>
-
-    <section class="reflection-card">
+    <section class="question-card">
       <div>
-        <p class="section-kicker">Checkpoint interpretation</p>
-        <h2>Why this direction is stronger</h2>
+        <p class="section-kicker">Visualization 1</p>
+
+        <h2>Where is the world getting greener or browner?</h2>
+
+        <p>
+          Using NASA MODIS NDVI satellite data from 2001 to 2024, this visualization maps long-term vegetation change
+          across the globe. Each dot represents a grid cell, and its color shows whether vegetation has increased,
+          decreased, or stayed relatively stable over time.
+        </p>
+
+        <p>
+          Click any dot to see its 24-year time series. Use the region selector to zoom into areas of interest, and use
+          the significance filter to focus on stronger trend patterns.
+        </p>
       </div>
-      <div class="reflection-grid">
+
+      <div class="data-note">
+        <strong>Data source</strong>
+        <span>NASA GIBS · MODIS Terra 16-Day NDVI Composites (MOD13A2)</span>
+        <span class="data-meta" id="data-meta">Loading data…</span>
+      </div>
+    </section>
+
+    <section class="controls-card" aria-label="Visualization controls">
+      <div class="control-heading">
+        <p class="section-kicker">Controls</p>
+
+        <h2>Explore the trend map</h2>
+      </div>
+
+      <div class="controls-grid ndvi-controls">
+        <label>
+          <span>Region</span>
+          <select id="region-select"></select>
+        </label>
+
+        <label class="toggle-label">
+          <span>Show only significant trends</span>
+          <input id="significance-toggle" type="checkbox" />
+        </label>
+
+        <div class="slider-wrap" id="r2-slider-wrap">
+          <span class="slider-label">R² threshold</span>
+          <input id="r2-threshold" type="range" min="0" max="0.80" step="0.01" value="0.30" />
+          <span class="slider-value" id="r2-value">0.30</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="viz-section ndvi-viz-section">
+      <article class="viz-card ndvi-map-card">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Map</p>
+
+            <h2>NDVI trend · July 2001–2024</h2>
+
+            <p class="graph-subtitle">Linear regression slope per grid cell · July-only MODIS NDVI</p>
+          </div>
+
+          <span class="pill" id="map-stats">Loading…</span>
+        </div>
+
+        <div class="map-container">
+          <svg id="ndvi-map" class="map-svg ndvi-map-svg" role="img" aria-label="Global NDVI trend map"></svg>
+
+          <div class="ndvi-legend" id="ndvi-legend" aria-hidden="true"></div>
+        </div>
+      </article>
+
+      <article class="viz-card ts-card" id="ts-panel">
+        <div class="viz-header">
+          <div>
+            <p class="graph-tag">Time series</p>
+
+            <h2 id="ts-title">Click a dot on the map</h2>
+          </div>
+        </div>
+
+        <div class="ts-placeholder" id="ts-placeholder">
+          <svg class="ts-icon" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+
+          <p>Click any colored dot on the map to see how NDVI changed at that location over 24 years.</p>
+        </div>
+
+        <div class="ts-content" id="ts-content" style="display:none">
+          <div id="ts-chart"></div>
+          <div class="ts-stats" id="ts-stats"></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="viz-card highlights-card">
+      <div class="viz-header">
+        <div>
+          <p class="graph-tag">Regional highlights</p>
+
+          <h2>Stories the data tells</h2>
+        </div>
+
+        <span class="pill">Click to explore</span>
+      </div>
+
+      <div class="highlights-grid" id="highlights-grid"></div>
+    </section>
+
+    <section class="writeup-card">
+      <div class="writeup-heading">
+        <p class="section-kicker">Design Rationale and Development Process</p>
+
+        <h2>Writeup</h2>
+      </div>
+
+      <div class="writeup-text">
         <p>
-          <strong>Clearer visual story:</strong> the temperature layer produces more readable differences across regions and seasons than the earlier NDVI and fire layers.
+          This visualization explores long-term vegetation change across the world using NASA MODIS NDVI data from 2001 to 2024. The central question driving our design was: Where is the Earth getting greener or browner over time? Instead of focusing on one year or one season, this graph uses a 24-year trend to show whether vegetation density has increased, decreased, or remained relatively stable in different regions.
         </p>
+
+        <h3>Rationale for Visual Encoding</h3>
+
         <p>
-          <strong>Good interaction:</strong> the region dropdown changes the spatial frame, while the date picker changes the temporal frame.
+          We chose a dot-based world map as the primary visual encoding because the data is spatial and global, but each observation represents a sampled grid cell rather than a full country or administrative boundary. A dot map allows viewers to compare vegetation trends across locations without making large land areas visually dominate the display. Each dot represents a grid cell, and its color encodes the direction and strength of the NDVI trend. </p>
+        <p>
+          For the color scale, we used green to represent increasing vegetation, brown to represent decreasing vegetation, and neutral tan/gray tones to represent relatively stable regions. This color choice is intuitive because green naturally maps to plant growth while brown suggests vegetation loss or drying. We used discrete color categories instead of a smooth gradient because the main task is classification: users should be able to quickly identify which areas are strongly greening, mildly greening, stable, mildly browning, or strongly browning.
         </p>
+
+        <h3>Rationale for Layout</h3>
+
         <p>
-          <strong>Next step:</strong> for the final project, this could become a more polished comparison of hot, dry, tropical, and urban regions.
+          The layout places the global NDVI trend map as the main focus, with the time-series panel positioned beside it. This supports a clear overview-to-detail structure. First, users can scan the world map to identify broad spatial patterns. Then, by clicking a dot, they can inspect the 24-year NDVI trend for that specific location. </p>
+        <p>
+          This layout is useful because a map alone only shows the final trend classification, while the time-series panel reveals the underlying data behind that trend. For example, a location may appear as “greening” on the map, but the time series helps users see whether the trend is steady, noisy, or influenced by a few extreme years. Keeping the map and time series visible together allows users to connect geographic patterns with temporal evidence.
+        </p>
+
+        <h3>Rationale for Interaction Techniques</h3>
+
+        <p>
+          We implemented several interaction techniques to support exploration: region selection, significance filtering, tooltips, dot selection, and zooming. The region dropdown allows users to zoom into specific environmental case studies such as the Amazon, India, the Sahel, California, and the boreal region. This helps users move from a global overview to more focused regional analysis.
+        </p>
+        <p>  The significance filter lets users focus on locations where the trend is stronger or more reliable based on the model fit. This is important because long-term environmental data can be noisy, and not every slope should be interpreted as a meaningful trend. Tooltips provide details-on-demand when users hover over points, while clicking a dot reveals the full NDVI time series. 
+        </p>
+
+        <h3>Alternatives Considered</h3>
+
+        <p>
+          We considered using a choropleth map, but decided against it because the data does not naturally belong to countries or political boundaries. A choropleth would also give too much visual weight to large countries or regions, which could distract from smaller but meaningful trend patterns. The dot-grid approach was more appropriate because each dot represents the same type of spatial unit. We also considered using a continuous green-to-brown color gradient. However, early versions made it difficult to distinguish subtle differences between mild and strong trends. We switched to discrete bins because they make the map easier to interpret at a glance. 
+        </p>
+
+        <h2>Development process</h2>
+
+        <h3>Work Split</h3>
+        <p>
+          For the checkpoint deliverables, we each came up with at least two graph proposals in order to meet the requirement of exploring 5–6 different visualization options. After discussing the strengths and weaknesses of these ideas, we decided to focus on two related but distinct angles: one graph comparing vegetation to land surface temperature across regions and seasons, and another graph showing long-term NDVI greening and browning trends across the world. This allowed us to connect short-term seasonal variation with long-term vegetation change.
+        </p>
+
+        <p>
+          For the final project submission, Isabela finalized the interactive temperature and EVI graph, while Jonathan finalized the NDVI trend graph. Aarav worked on the write-up based on their inputs, and compiled both visualizations into the website.
+        </p>
+
+        <p>
+          Time spent: Approximately 20 people-hours total across the project.
+        </p>
+
+        <h3>What took the most time?</h3>
+        <p>
+          The most time-consuming part was making both NASA MODIS-based visualizations function reliably and feel connected as one project. For the temperature and EVI graph, we had to test different bounding boxes, date formats, and map layers to make sure the imagery loaded correctly for each selected region, year, and season. It also took time to narrow the visualization to two variables and design the side-by-side layout so users could clearly compare temperature and vegetation patterns.
+        </p>
+
+        <p>
+          For the NDVI trend graph, the most difficult part was transforming the long-term vegetation data into a format that could load efficiently and work interactively in the browser. We had to calculate trend values for each grid cell, choose meaningful color thresholds, and make sure the dot map stayed readable with many points displayed at once. Debugging the interactions, especially connecting clicked dots to the correct 24-year time series and making the region filters update cleanly, also took significant time.
+        </p>
+
+        <p>
+          Finally, we spent time making the two graphs feel like parts of the same story rather than two separate projects. This included aligning the website structure, writing consistent design rationales, keeping the shared title and navigation clear, and using the write-up sections to explain how the two visualizations work together to explore vegetation, temperature, and environmental change.
+        </p>
+
+        <p class="next-link-wrap">
+          <a href="temperature.html" class="next-link">Continue to Temperature & Vegetation →</a>
         </p>
       </div>
     </section>
-    -->
-
-    <!-- Side by side visualization potential final-->
-     <section class="viz-section side-by-side">
-
-      <!--Existing temperature map-->
-      <article class="viz-card primary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Temperature 🌡️</p>
-            <h2>Land Surface Temperature</h2>
-          </div>
-        </div>
-        <svg id="temp-main" class="map-svg"></svg>
-        <p class="caption" id="temp-caption"></p>
-      </article>
-
-      <!--Vegetation map-->
-      <article class="viz-card primary-viz">
-        <div class="viz-header">
-          <div>
-            <p class="graph-tag">Vegetation 🌱</p>
-            <h2>Enhanced Vegetation Index (EVI)</h2>
-          </div>
-        </div>
-        <svg id="veg-main" class="map-svg"></svg>
-        <p class="caption" id="veg-caption"></p>
-      </article>
-     </section>
   </main>
 
   <div id="tooltip" class="tooltip" aria-hidden="true"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-  <script src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <script src="ndvi-trend.js"></script>
 </body>
 </html>
